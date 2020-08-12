@@ -39,5 +39,10 @@ namespace AdmissionTest.Controller {
             activityService.Add(activity);
             return activity;
         }
+
+        [HttpGet("datetimeinterval")]
+        public IEnumerable<Activity> GetByDateTimeInterval(DateTime from, DateTime to) {
+            return activityService.GetByDateTimeInterval(from, to);
+        }
     }
 }

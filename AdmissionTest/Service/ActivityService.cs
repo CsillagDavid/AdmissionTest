@@ -31,5 +31,10 @@ namespace AdmissionTest.Service {
         {
             return activityManagement.GetAll();
         }
+
+        public IEnumerable<Activity> GetByDateTimeInterval(DateTime from, DateTime to)
+        {
+            return activityManagement.GetByDateTimeInterval(from, to);
+        }
     }
 }

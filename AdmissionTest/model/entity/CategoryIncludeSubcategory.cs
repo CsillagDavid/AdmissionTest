@@ -5,6 +5,6 @@ using System.Threading.Tasks;
 
 namespace AdmissionTest.model.entity {
     public class CategoryIncludeSubcategory: Category {
-        public IEnumerable<Subcategory> subcategories;
+        public IEnumerable<Subcategory> Subcategories;
     }
 }

@@ -8,5 +8,6 @@ namespace AdmissionTest.Service.IService {
     public interface IActivityService {
         public void Add(Activity activity);
         public IEnumerable<Activity> GetAll();
+        public IEnumerable<Activity> GetByDateTimeInterval(DateTime from, DateTime to);
     }
 }

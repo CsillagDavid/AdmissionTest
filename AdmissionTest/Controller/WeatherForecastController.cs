@@ -27,9 +27,10 @@ namespace AdmissionTest.Controllers {
         [HttpGet("sub")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IEnumerable<CategorySubcategory> GetAllCategorySubcategory()
+        public IEnumerable<CategoryIncludeSubcategory> GetAllCategorySubcategory()
         {
-            return categoryManagement.GetAllCategorySubcategory();
+            var retval = categoryManagement.GetAllWithSubcategory();
+            return retval;
         }
 
         [HttpGet]
