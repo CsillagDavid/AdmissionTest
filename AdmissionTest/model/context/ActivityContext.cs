@@ -12,7 +12,6 @@ namespace AdmissionTest.model.context {
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
         }
     }
 }

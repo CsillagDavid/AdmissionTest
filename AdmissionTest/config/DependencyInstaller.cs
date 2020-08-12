@@ -18,6 +18,7 @@ namespace AdmissionTest.config {
             services.AddDbContext<CategoryContext>(options => options.UseSqlServer(connectionString));
             services.AddDbContext<SubcategoryContext>(options => options.UseSqlServer(connectionString));
             services.AddDbContext<ActivityContext>(options => options.UseSqlServer(connectionString));
+            services.AddDbContext<CategorySubcategoryContext>(options => options.UseSqlServer(connectionString));
 
             services.AddScoped<ICategoryManagement, CategoryManagement>();
             services.AddScoped<ISubcategoryManagement, SubcategoryManagement>();
@@ -25,6 +26,7 @@ namespace AdmissionTest.config {
 
             services.AddScoped<IActivityService, ActivityService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ISubcategoryService, SubcategoryService>();
 
         }
     }

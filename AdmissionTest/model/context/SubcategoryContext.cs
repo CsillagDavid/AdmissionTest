@@ -12,5 +12,12 @@ namespace AdmissionTest.model.context {
         {
 
         }
+
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    modelBuilder.Entity<Subcategory>()
+        //                .HasOne<Category>(e => e.Category)
+        //                .WithMany();
+        //}
     }
 }

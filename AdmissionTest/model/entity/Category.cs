@@ -18,6 +18,8 @@ namespace AdmissionTest.model.entity {
         [Column(name: "name")]
         public string Name { get; set; }
 
+        public virtual IList<Subcategory> Subcategories { get; set; }
+
         [NotNull]
         [Column(name: "created_at")]
         public DateTime CreateAt { get; set; }

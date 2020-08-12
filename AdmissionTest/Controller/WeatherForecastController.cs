@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AdmissionTest.Management.IManagement;
 using AdmissionTest.model.entity;
+using AdmissionTest.Service.IService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -18,19 +19,21 @@ namespace AdmissionTest.Controllers {
 
         private readonly ILogger<WeatherForecastController> _logger;
         private readonly ICategoryManagement categoryManagement;
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, ICategoryManagement categoryManagement)
+        private readonly ISubcategoryService subcategoryService;
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, ICategoryManagement categoryManagement, ISubcategoryService subcategoryService)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.categoryManagement = categoryManagement;
+            this.subcategoryService = subcategoryService;
         }
 
-        [HttpGet("sub")]
+
+        [HttpGet("justsub")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IEnumerable<CategoryIncludeSubcategory> GetAllCategorySubcategory()
+        public IEnumerable<Subcategory> GetAllSub()
         {
-            var retval = categoryManagement.GetAllWithSubcategory();
-            return retval;
+            return subcategoryService.GetAll();
         }
 
         [HttpGet]

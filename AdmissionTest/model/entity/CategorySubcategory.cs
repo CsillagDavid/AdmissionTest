@@ -14,12 +14,15 @@ namespace AdmissionTest.model.entity {
         [Column(name: "id")]
         public int ID { get; set; }
 
+        public int CategoryId { set; get; }
         [NotNull]
         [ForeignKey(name: "category")]
-        public Category Category { get; set; }
+        public Category Category { set; get; }
 
+        public int SubcategoryId { set; get; }
         [NotNull]
         [ForeignKey(name: "subcategory")]
-        public Subcategory Subcategory { get; set; }
+        public Subcategory Subcategory { set; get; }
+
     }
 }

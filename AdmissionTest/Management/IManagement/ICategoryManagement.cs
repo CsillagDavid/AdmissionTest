@@ -8,6 +8,5 @@ namespace AdmissionTest.Management.IManagement {
     public interface ICategoryManagement {
         public void Save(Category category);
         public IEnumerable<Category> GetAll();
-        public IEnumerable<CategoryIncludeSubcategory> GetAllWithSubcategory();
     }
 }

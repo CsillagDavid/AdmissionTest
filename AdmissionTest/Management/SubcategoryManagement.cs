@@ -1,6 +1,7 @@
 ﻿using AdmissionTest.Management.IManagement;
 using AdmissionTest.model.context;
 using AdmissionTest.model.entity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace AdmissionTest.Management {
 
         public IEnumerable<Subcategory> GetAll()
         {
-            return subcategoryContext.Subcategories.ToList<Subcategory>();
+            return subcategoryContext.Subcategories.ToList();
         }
 
         public void Save(Subcategory subcategory)

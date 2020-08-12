@@ -16,7 +16,7 @@ namespace AdmissionTest.Management {
 
         public IEnumerable<Activity> GetAll()
         {
-            return activityContext.Activities.Include(a => a.Category).Include(a => a.Subcategory).ToList();
+            return activityContext.Activities.Include(a => a.Category).ToList();
         }
 
         public IEnumerable<Activity> GetByDateTimeInterval(DateTime from, DateTime to)
