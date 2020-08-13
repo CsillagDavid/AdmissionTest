@@ -14,49 +14,73 @@ namespace AdmissionTest.Management {
             this.activityContext = activityContext;
         }
 
-        public IEnumerable<Activity> GetAll()
+        public IList<Activity> GetAll()
         {
-            return activityContext.Activities.Include(a => a.Category).ToList();
+            var activities = activityContext.Activities.Include(a => a.Category).Include(a => a.Subcategory).ToList();
+            activities.ForEach(a => {
+                a.Subcategory.Category = null;
+            });
+            return activities;
         }
 
-        public IEnumerable<Activity> GetByDateTimeInterval(DateTime from, DateTime to)
+        public IList<Activity> GetByDateTimeInterval(DateTime from, DateTime to)
         {
-            return activityContext.Activities.Where(a => ((a.StartDate.CompareTo(to) == -1) && (a.StartDate.CompareTo(from) >= 0)) ||
+            var activities = activityContext.Activities.Where(a => ((a.StartDate.CompareTo(to) == -1) && (a.StartDate.CompareTo(from) >= 0)) ||
             (a.EndDate.CompareTo(to) < 1) && (a.EndDate.CompareTo(from) == 1) ||
             (a.StartDate.CompareTo(from) == -1) && (a.EndDate.CompareTo(to) == 1))
-            .Include(a => a.Category).Include(a => a.Subcategory)
-            .ToList();
+            .Include(a => a.Category).Include(a => a.Subcategory).ToList();
+            activities.ForEach(a =>
+            {
+                a.Subcategory.Category = null;
+            });
+            return activities;
         }
 
         public bool IsColliding(Activity activity)
         {
-            // var vmi = activityContext.Activities.Where(a => ((a.StartDate.CompareTo(activity.EndDate) == 1) && (a.EndDate.CompareTo(activity.EndDate) <= 1)) ||
-            //(a.StartDate.CompareTo(activity.StartDate) >= 0) && (a.EndDate.CompareTo(activity.StartDate) == -1) ||
-            //(a.StartDate.CompareTo(activity.StartDate) == -1) && (a.EndDate.CompareTo(activity.EndDate) == 1));
-            // var kkk = activityContext.Activities.Where(a => a.ID > 0).ToList();
-            // var asd = kkk.Select(a => ((activity.StartDate.CompareTo(a.EndDate) == -1) && (activity.StartDate.CompareTo(a.StartDate) >= 0)) ||
-            // (activity.EndDate.CompareTo(a.EndDate) < 1) && (activity.EndDate.CompareTo(a.StartDate) == 1));
-            // var asd2 = kkk.Select(a => ((activity.StartDate.CompareTo(a.EndDate) == -1) && (activity.StartDate.CompareTo(a.StartDate) >= 0)) ||
-            // (activity.EndDate.CompareTo(a.EndDate) < 1) && (activity.EndDate.CompareTo(a.StartDate) == 1) ||
-            // (activity.StartDate.CompareTo(a.StartDate) == -1) && (activity.EndDate.CompareTo(a.EndDate) == 1));
             return activityContext.Activities.Any(a => ((activity.StartDate.CompareTo(a.EndDate) == -1) && (activity.StartDate.CompareTo(a.StartDate) >= 0)) ||
             (activity.EndDate.CompareTo(a.EndDate) < 1) && (activity.EndDate.CompareTo(a.StartDate) == 1) ||
             (activity.StartDate.CompareTo(a.StartDate) == -1) && (activity.EndDate.CompareTo(a.EndDate) == 1));
         }
 
+        public bool IsUpdateColliding(Activity activity)
+        {
+            return activityContext.Activities.Where(a => a.ID != activity.ID).Any(a => ((activity.StartDate.CompareTo(a.EndDate) == -1) && (activity.StartDate.CompareTo(a.StartDate) >= 0)) ||
+            (activity.EndDate.CompareTo(a.EndDate) < 1) && (activity.EndDate.CompareTo(a.StartDate) == 1) ||
+            (activity.StartDate.CompareTo(a.StartDate) == -1) && (activity.EndDate.CompareTo(a.EndDate) == 1));
+        }
+
+        
         public void Save(Activity activity)
         {
+            //activityContext.Activities.FromSql("INSERT INTO ", 
+            //    activity.Comment,
+            //    activity.Category.ID,
+            //    activity.Subcategory.ID,
+            //    activity.StartDate,
+            //    activity.EndDate
+            //    );
+            activity.Category.Subcategories = null;
             activityContext.Activities.Add(activity);
             activityContext.Attach(activity.Category);
-            //activityContext.Attach(activity.Category.Subcategory);
             activityContext.Attach(activity.Subcategory);
             activityContext.SaveChanges();
         }
 
-        private bool IsColliding(Activity a1, Activity a2)
+        public void Update(Activity activity)
         {
-            return !((a1.StartDate.CompareTo(a2.EndDate) < 1) ||
-                (a1.EndDate.CompareTo(a2.StartDate) >= 0));
+            //activityContext.Activities.FromSql("INSERT INTO ", 
+            //    activity.Comment,
+            //    activity.Category.ID,
+            //    activity.Subcategory.ID,
+            //    activity.StartDate,
+            //    activity.EndDate
+            //    );
+            activity.Category.Subcategories = null;
+            activityContext.Activities.Update(activity);
+            activityContext.Attach(activity.Category);
+            activityContext.Attach(activity.Subcategory);
+            activityContext.SaveChanges();
         }
     }
 }

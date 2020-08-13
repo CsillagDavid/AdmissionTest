@@ -19,7 +19,7 @@ namespace AdmissionTest.Service {
             this.categoryManagement = categoryManagement ?? throw new ArgumentNullException(nameof(categoryManagement));
         }
 
-        public IEnumerable<Category> GetAll()
+        public IList<Category> GetAll()
         {
             return categoryManagement.GetAll();
         }

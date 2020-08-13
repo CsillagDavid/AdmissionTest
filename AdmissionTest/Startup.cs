@@ -24,6 +24,7 @@ namespace AdmissionTest {
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
             ConfigurationInstaller.Configure(Configuration, services);
             services.AddControllers();
         }
@@ -35,6 +36,10 @@ namespace AdmissionTest {
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors(
+                options => options.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod()
+            );
 
             app.UseHttpsRedirection();
 

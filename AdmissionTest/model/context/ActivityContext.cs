@@ -1,4 +1,5 @@
 ﻿using AdmissionTest.model.entity;
+using Microsoft.EntityFrameworkCore.Proxies;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,8 +10,13 @@ namespace AdmissionTest.model.context {
         public DbSet<Activity> Activities { get; set; }
         public ActivityContext(DbContextOptions<ActivityContext> options) : base(options)
         {
+
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
         }
     }

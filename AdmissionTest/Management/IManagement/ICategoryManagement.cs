@@ -7,6 +7,6 @@ using System.Threading.Tasks;
 namespace AdmissionTest.Management.IManagement {
     public interface ICategoryManagement {
         public void Save(Category category);
-        public IEnumerable<Category> GetAll();
+        public IList<Category> GetAll();
     }
 }

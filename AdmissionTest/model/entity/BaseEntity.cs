@@ -7,22 +7,17 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace AdmissionTest.model.entity {
-    [Table(name: "category_subcategory")]
-    public class CategorySubcategory {
+    public class BaseEntity<T> {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column(name: "id")]
-        public int ID { get; set; }
+        public T ID { get; set; }
 
-        public int CategoryId { set; get; }
         [NotNull]
-        [ForeignKey(name: "category")]
-        public Category Category { set; get; }
+        [Column(name: "created_at")]
+        public DateTime CreateAt { get; set; }
 
-        public int SubcategoryId { set; get; }
-        [NotNull]
-        [ForeignKey(name: "subcategory")]
-        public Subcategory Subcategory { set; get; }
-
+        [Column(name: "modified_at")]
+        public DateTime ModifiedAt { get; set; }
     }
 }

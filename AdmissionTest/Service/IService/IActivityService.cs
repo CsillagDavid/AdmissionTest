@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 namespace AdmissionTest.Service.IService {
     public interface IActivityService {
         public void Add(Activity activity);
-        public IEnumerable<Activity> GetAll();
-        public IEnumerable<Activity> GetByDateTimeInterval(DateTime from, DateTime to);
+        public void Update(Activity activity);
+        public IList<Activity> GetAll();
+        public IList<Activity> GetByDateTimeInterval(DateTime from, DateTime to);
     }
 }

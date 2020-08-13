@@ -27,14 +27,23 @@ namespace AdmissionTest.Service {
             }
         }
 
-        public IEnumerable<Activity> GetAll()
+        public IList<Activity> GetAll()
         {
             return activityManagement.GetAll();
         }
 
-        public IEnumerable<Activity> GetByDateTimeInterval(DateTime from, DateTime to)
+        public IList<Activity> GetByDateTimeInterval(DateTime from, DateTime to)
         {
             return activityManagement.GetByDateTimeInterval(from, to);
+        }
+
+        public void Update(Activity activity)
+        {
+            if (!activityManagement.IsUpdateColliding(activity))
+            {
+                activity.ModifiedAt = DateTime.Now;
+                activityManagement.Update(activity);
+            }
         }
     }
 }

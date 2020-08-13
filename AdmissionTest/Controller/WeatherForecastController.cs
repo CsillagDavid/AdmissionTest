@@ -4,6 +4,7 @@ using System.Linq;
 using AdmissionTest.Management.IManagement;
 using AdmissionTest.model.entity;
 using AdmissionTest.Service.IService;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -39,7 +40,7 @@ namespace AdmissionTest.Controllers {
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IEnumerable<Category> GetAll()
+        public IList<Category> GetAll()
         {
             return categoryManagement.GetAll();
         }

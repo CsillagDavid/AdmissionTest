@@ -5,8 +5,10 @@ using System.Collections.Generic;
 namespace AdmissionTest.Management.IManagement {
     public interface IActivityManagement {
         public void Save(Activity activity);
-        public IEnumerable<Activity> GetByDateTimeInterval(DateTime from, DateTime to);
+        public IList<Activity> GetByDateTimeInterval(DateTime from, DateTime to);
         public bool IsColliding(Activity activity);
-        public IEnumerable<Activity> GetAll();
+        public bool IsUpdateColliding(Activity activity);
+        public IList<Activity> GetAll();
+        public void Update(Activity activity);
     }
 }

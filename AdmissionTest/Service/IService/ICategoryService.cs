@@ -7,6 +7,6 @@ using System.Threading.Tasks;
 namespace AdmissionTest.Service.IService {
     public interface ICategoryService {
         public void Save(Category category);
-        public IEnumerable<Category> GetAll();
+        public IList<Category> GetAll();
     }
 }

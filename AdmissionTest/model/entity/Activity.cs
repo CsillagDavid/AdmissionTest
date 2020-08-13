@@ -13,16 +13,24 @@ namespace AdmissionTest.model.entity {
         public int ID { get; set; }
 
         [NotNull]
+        [Column(name: "created_at")]
+        public DateTime CreateAt { get; set; }
+
+        [AllowNull]
+        [Column(name: "modified_at")]
+        public DateTime? ModifiedAt { get; set; }
+
+        [NotNull]
         [Column(name: "comment")]
         public string Comment { get; set; }
 
         [NotNull]
         [ForeignKey(name: "category")]
-        public Category Category { get; set; }
+        public virtual Category Category { get; set; }
 
-        [NotNull]
+        [AllowNull]
         [ForeignKey(name: "subcategory")]
-        public Subcategory Subcategory { get; set; }
+        public virtual Subcategory Subcategory { get; set; }
 
         [NotNull]
         [Column(name: "start_date")]
@@ -31,9 +39,5 @@ namespace AdmissionTest.model.entity {
         [NotNull]
         [Column(name: "end_date")]
         public DateTime EndDate { get; set; }
-
-        [NotNull]
-        [Column(name: "created_at")]
-        public DateTime CreateAt { get; set; }
     }
 }

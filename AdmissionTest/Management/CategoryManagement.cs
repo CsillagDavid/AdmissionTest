@@ -10,14 +10,20 @@ using System.Threading.Tasks;
 namespace AdmissionTest.Management {
     public class CategoryManagement: ICategoryManagement {
         private readonly CategoryContext categoryContext;
-        public CategoryManagement(CategoryContext categoryContext)
+        private readonly SubcategoryContext subcategoryContext;
+        public CategoryManagement(CategoryContext categoryContext, SubcategoryContext subcategoryContext)
         {
             this.categoryContext = categoryContext;
+            this.subcategoryContext = subcategoryContext;
         }
 
-        public IEnumerable<Category> GetAll()
+        public IList<Category> GetAll()
         {
-            return categoryContext.Categories.Include(c => c.Subcategories).ToList();
+            var categories = categoryContext.Categories.ToList();
+            categories.ForEach(c => {
+                c.Subcategories = subcategoryContext.Subcategories.Include(s => s.Category).Where(s => s.Category.ID.Equals(c.ID)).ToList();
+            });
+            return categories;
         }
 
         public void Save(Category category)

@@ -27,21 +27,29 @@ namespace AdmissionTest.Controller {
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         //[ProducesResponseType(typeof(IEnumerable<Category>), StatusCodes.Status200OK)]
-        public IEnumerable<Activity> GetAll()
+        public IList<Activity> GetAll()
         {
             return activityService.GetAll();
         }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public Activity Add(Activity activity)
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public void Add(Activity activity)
         {
             activityService.Add(activity);
-            return activity;
+        }
+
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public void Update(Activity activity)
+        {
+            activityService.Update(activity);
         }
 
         [HttpGet("datetimeinterval")]
-        public IEnumerable<Activity> GetByDateTimeInterval(DateTime from, DateTime to) {
+        public IList<Activity> GetByDateTimeInterval(DateTime from, DateTime to) {
             return activityService.GetByDateTimeInterval(from, to);
         }
     }

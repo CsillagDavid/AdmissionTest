@@ -8,18 +8,27 @@ using System.Threading.Tasks;
 
 namespace AdmissionTest.model.entity {
     [Table(name: "subcategory")]
-    public class Subcategory {
+    public class Subcategory{
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column(name: "id")]
         public int ID { get; set; }
 
         [NotNull]
+        [Column(name: "created_at")]
+        public DateTime CreateAt { get; set; }
+
+        [AllowNull]
+        [Column(name: "modified_at")]
+        public DateTime? ModifiedAt { get; set; }
+
+        [NotNull]
         [Column(name: "name")]
         public string Name { get; set; }
 
         [NotNull]
-        [Column(name: "created_at")]
-        public DateTime CreateAt { get; set; }
+        [ForeignKey(name: "category")]
+        public virtual Category Category { get; set; }
     }
 }
