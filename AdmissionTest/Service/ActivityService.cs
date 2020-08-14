@@ -11,12 +11,10 @@ using System.Threading.Tasks;
 namespace AdmissionTest.Service {
     public class ActivityService: IActivityService {
         private readonly IActivityManagement activityManagement;
-        private readonly ILogger<ActivityService> logger;
 
-        public ActivityService(ILogger<ActivityService> logger, IActivityManagement activityManagement)
+        public ActivityService(IActivityManagement activityManagement)
         {
             this.activityManagement = activityManagement;
-            this.logger = logger;
         }
 
         public void Add(Activity activity)

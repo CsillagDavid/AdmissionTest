@@ -17,7 +17,8 @@ namespace AdmissionTest.Management {
         public IList<Activity> GetAll()
         {
             var activities = activityContext.Activities.Include(a => a.Category).Include(a => a.Subcategory).ToList();
-            activities.ForEach(a => {
+            activities.ForEach(a =>
+            {
                 a.Subcategory.Category = null;
             });
             return activities;
@@ -31,7 +32,10 @@ namespace AdmissionTest.Management {
             .Include(a => a.Category).Include(a => a.Subcategory).ToList();
             activities.ForEach(a =>
             {
-                a.Subcategory.Category = null;
+                if (a.Subcategory != null)
+                {
+                    a.Subcategory.Category = null;
+                }
             });
             return activities;
         }
@@ -50,7 +54,7 @@ namespace AdmissionTest.Management {
             (activity.StartDate.CompareTo(a.StartDate) == -1) && (activity.EndDate.CompareTo(a.EndDate) == 1));
         }
 
-        
+
         public void Save(Activity activity)
         {
             //activityContext.Activities.FromSql("INSERT INTO ", 
@@ -63,7 +67,10 @@ namespace AdmissionTest.Management {
             activity.Category.Subcategories = null;
             activityContext.Activities.Add(activity);
             activityContext.Attach(activity.Category);
-            activityContext.Attach(activity.Subcategory);
+            if (activity.Subcategory != null)
+            {
+                activityContext.Attach(activity.Subcategory);
+            }
             activityContext.SaveChanges();
         }
 

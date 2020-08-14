@@ -46,6 +46,7 @@ namespace AdmissionTest.Controller {
         public void Update(Activity activity)
         {
             activityService.Update(activity);
+            HttpContext.Response.StatusCode = StatusCodes.Status200OK;
         }
 
         [HttpGet("datetimeinterval")]

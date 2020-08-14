@@ -26,7 +26,7 @@ namespace AdmissionTest.config {
             services.AddScoped<IActivityService, ActivityService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ISubcategoryService, SubcategoryService>();
-
+            services.AddScoped<IReportService, ReportService>();
         }
     }
 }

@@ -30,7 +30,7 @@ namespace AdmissionTest.model.entity {
 
         [AllowNull]
         [ForeignKey(name: "subcategory")]
-        public virtual Subcategory Subcategory { get; set; }
+        public virtual Subcategory? Subcategory { get; set; }
 
         [NotNull]
         [Column(name: "start_date")]
