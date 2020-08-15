@@ -2,10 +2,8 @@
 using AdmissionTest.model.context;
 using AdmissionTest.model.entity;
 using System.Data.Entity;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace AdmissionTest.Management {
     public class CategoryManagement: ICategoryManagement {
@@ -17,6 +15,12 @@ namespace AdmissionTest.Management {
             this.subcategoryContext = subcategoryContext;
         }
 
+        public Category FindWithName(string name)
+        {
+            var lowerName = name.ToLower();
+            return categoryContext.Categories.FirstOrDefault(c => c.Name.ToLower().Equals(lowerName));
+        }
+        
         public IList<Category> GetAll()
         {
             var categories = categoryContext.Categories.ToList();

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Runtime.Serialization;
 
 namespace AdmissionTest.model.exception {
@@ -20,6 +17,11 @@ namespace AdmissionTest.model.exception {
 
         protected ActivityApiException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
+        }
+
+        public override string ToString()
+        {
+            return Message;
         }
     }
 }

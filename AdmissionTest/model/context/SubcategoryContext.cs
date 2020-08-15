@@ -1,9 +1,5 @@
 ﻿using AdmissionTest.model.entity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace AdmissionTest.model.context {
     public class SubcategoryContext : DbContext{
@@ -12,16 +8,10 @@ namespace AdmissionTest.model.context {
         {
 
         }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Configure entity filters
+            modelBuilder.Entity<Subcategory>().HasQueryFilter(s => !s.Archived);
         }
-
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    modelBuilder.Entity<Subcategory>()
-        //                .HasOne<Category>(e => e.Category)
-        //                .WithMany();
-        //}
     }
 }

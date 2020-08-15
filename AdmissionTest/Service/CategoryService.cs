@@ -1,12 +1,9 @@
-﻿using AdmissionTest.Management;
-using AdmissionTest.Management.IManagement;
+﻿using AdmissionTest.Management.IManagement;
 using AdmissionTest.model.entity;
 using AdmissionTest.Service.IService;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace AdmissionTest.Service {
     public class CategoryService : ICategoryService {
@@ -26,7 +23,9 @@ namespace AdmissionTest.Service {
 
         public void Save(Category category)
         {
-            categoryManagement.Save(category);
+            if (categoryManagement.FindWithName(category.Name) is null) {
+                categoryManagement.Save(category);
+            }
         }
     }
 }

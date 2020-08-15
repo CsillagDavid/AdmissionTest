@@ -1,9 +1,5 @@
 ﻿using AdmissionTest.model.entity;
-using Microsoft.EntityFrameworkCore.Proxies;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace AdmissionTest.model.context {
     public class ActivityContext : DbContext {
@@ -14,10 +10,8 @@ namespace AdmissionTest.model.context {
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
+            // Configure entity filters
+            modelBuilder.Entity<Activity>().HasQueryFilter(a => !a.Archived);
         }
     }
 }

@@ -1,13 +1,11 @@
 ﻿using AdmissionTest.model.entity;
-using AdmissionTest.Service;
 using AdmissionTest.Service.IService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Net;
 
 namespace AdmissionTest.Controller {
     [ApiController]
@@ -15,13 +13,11 @@ namespace AdmissionTest.Controller {
     public class ActivityController: ControllerBase {
         private readonly ILogger<ActivityController> logger;
         private readonly IActivityService activityService;
-        private readonly ICategoryService categoryService;
 
-        public ActivityController(ILogger<ActivityController> logger, IActivityService activityService, ICategoryService categoryService)
+        public ActivityController(ILogger<ActivityController> logger, IActivityService activityService)
         {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.activityService = activityService ?? throw new ArgumentNullException(nameof(activityService));
-            this.categoryService = categoryService ?? throw new ArgumentNullException(nameof(categoryService));
         }
 
         [HttpGet]
@@ -37,7 +33,17 @@ namespace AdmissionTest.Controller {
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public void Add(Activity activity)
         {
-            activityService.Add(activity);
+            try
+            {
+                activityService.Add(activity);
+                logger.LogInformation("Activity saved " + activity);
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = StatusCodes.Status500InternalServerError;
+                logger.LogError(ex.Message);
+                throw;
+            }
         }
 
         [HttpPut]
@@ -45,13 +51,33 @@ namespace AdmissionTest.Controller {
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public void Update(Activity activity)
         {
-            activityService.Update(activity);
-            HttpContext.Response.StatusCode = StatusCodes.Status200OK;
+            try
+            {
+                activityService.Update(activity);
+                logger.LogInformation("Activity updated " + activity);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex.Message);
+                throw;
+            }
         }
 
-        [HttpGet("datetimeinterval")]
-        public IList<Activity> GetByDateTimeInterval(DateTime from, DateTime to) {
-            return activityService.GetByDateTimeInterval(from, to);
+        [HttpPost("delete")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public void Delete(Activity activity)
+        {
+            try
+            {
+                activityService.Delete(activity);
+                logger.LogInformation("Activity deleted " + activity);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex.Message);
+                throw;
+            }
         }
     }
 }

@@ -1,11 +1,10 @@
 ﻿using AdmissionTest.model.entity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace AdmissionTest.Service.IService {
     public interface IReportService {
+        /// <summary>
+        /// Crreate a <see cref="Report"/> object that contains an <see cref="ReportProperty"/> list that store activities in group by category
+        /// </summary>
         public Report CreateDailyReport();
     }
 }

@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AdmissionTest.model.entity;
 using AdmissionTest.Service.IService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace AdmissionTest.Controller
-{
+namespace AdmissionTest.Controller {
     [ApiController]
     [Route("[controller]")]
     public class ReportController : ControllerBase {

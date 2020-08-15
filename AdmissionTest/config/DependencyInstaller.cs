@@ -4,15 +4,15 @@ using AdmissionTest.model.context;
 using AdmissionTest.Service;
 using AdmissionTest.Service.IService;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace AdmissionTest.config {
     public static class DependencyInstaller {
+        /// <summary>
+        /// Make scoped dependencies and creat db contexts
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="connectionString"></param>
         public static void Configure(IServiceCollection services, string connectionString)
         {
             services.AddDbContext<CategoryContext>(options => options.UseSqlServer(connectionString));

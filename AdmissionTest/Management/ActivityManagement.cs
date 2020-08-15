@@ -14,12 +14,33 @@ namespace AdmissionTest.Management {
             this.activityContext = activityContext;
         }
 
+        public void Delete(Activity activity)
+        {
+            var deletableActivity = activityContext.Activities.Include(a => a.Category).Include(a => a.Subcategory).First(a => a.ID == activity.ID);
+            deletableActivity.Archived = true;
+            activityContext.Activities.Update(deletableActivity);
+            activityContext.SaveChanges();
+        }
+
+        public Activity FindById(int id)
+        {
+            var activity = activityContext.Activities.Include(a => a.Category).Include(a => a.Subcategory).FirstOrDefault(a => a.ID == id);
+            if (activity != null)
+            {
+                activity.Subcategory.Category = null;
+            }
+            return activity;
+        }
+
         public IList<Activity> GetAll()
         {
             var activities = activityContext.Activities.Include(a => a.Category).Include(a => a.Subcategory).ToList();
             activities.ForEach(a =>
             {
-                a.Subcategory.Category = null;
+                if (a.Subcategory != null)
+                {
+                    a.Subcategory.Category = null;
+                }
             });
             return activities;
         }
@@ -76,18 +97,17 @@ namespace AdmissionTest.Management {
 
         public void Update(Activity activity)
         {
-            //activityContext.Activities.FromSql("INSERT INTO ", 
-            //    activity.Comment,
-            //    activity.Category.ID,
-            //    activity.Subcategory.ID,
-            //    activity.StartDate,
-            //    activity.EndDate
-            //    );
-            activity.Category.Subcategories = null;
-            activityContext.Activities.Update(activity);
-            activityContext.Attach(activity.Category);
-            activityContext.Attach(activity.Subcategory);
-            activityContext.SaveChanges();
+            this.Delete(activity);
+            activity.ModifiedAt = DateTime.Now;
+            this.Save(activity);
+            //updatableActivity.ModifiedAt = DateTime.Now;
+            //activityContext.Activities.Update(updatableActivity);
+            //if (updatableActivity.Subcategory != null)
+            //{
+            //    activityContext.Attach(updatableActivity.Subcategory);
+            //}
+            //activityContext.Attach(updatableActivity.Category);
+            //activityContext.SaveChanges();
         }
     }
 }

@@ -1,11 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Data.SqlClient;
 
 namespace AdmissionTest.config.Database {
     public static class EvolveInstaller {
+        /// <summary>
+        /// Configure and run migrations
+        /// </summary>
+        /// <param name="connectionString"></param>
+        /// <param name="migrationLocation"></param>
         public static void Configure(string connectionString, string migrationLocation) {
             try
             {

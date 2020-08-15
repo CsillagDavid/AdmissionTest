@@ -1,13 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using AdmissionTest.config.Database;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AdmissionTest.config {
     public static class ConfigurationInstaller {
+        /// <summary>
+        /// Run all configuration class's Configure methode
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <param name="services"></param>
         public static void Configure(IConfiguration configuration, IServiceCollection services) {
             EnvironmentInstaller.Configure(configuration);
 

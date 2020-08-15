@@ -20,6 +20,9 @@ namespace AdmissionTest.model.entity {
         [Column(name: "modified_at")]
         public DateTime? ModifiedAt { get; set; }
 
+        [Column(name: "archived")]
+        public bool Archived { get; set; }
+
         [NotNull]
         [Column(name: "comment")]
         public string Comment { get; set; }

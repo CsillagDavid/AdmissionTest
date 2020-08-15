@@ -3,6 +3,7 @@
     name varchar(255) NOT NULL,
     created_at datetime2 NOT NULL,
     modified_at datetime2,
+    archived bit DEFAULT 0,
     PRIMARY KEY (id)
 )
 
@@ -12,6 +13,7 @@ CREATE TABLE subcategory(
     category int NOT NULL,
     created_at datetime2  NOT NULL,
     modified_at datetime2,
+    archived bit DEFAULT 0,
     FOREIGN KEY (category) REFERENCES category(id),
     PRIMARY KEY (id)
 )
@@ -25,6 +27,7 @@ CREATE TABLE activity (
     comment varchar(255) NOT NULL,
     created_at datetime2  NOT NULL,
     modified_at datetime2,
+    archived bit DEFAULT 0,
     PRIMARY KEY (id),
     FOREIGN KEY (category) REFERENCES category(id),
     FOREIGN KEY (subcategory) REFERENCES subcategory(id)

@@ -1,12 +1,17 @@
 ﻿using AdmissionTest.model.entity;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace AdmissionTest.Service.IService {
     public interface ISubcategoryService {
+        /// <summary>
+        /// Save a <see cref="Subcategory"/> entity
+        /// </summary>
+        /// <param name="subcategory"></param>
         public void Save(Subcategory subcategory);
+        /// <summary>
+        /// Return with all <see cref="Subcategory"/> entity
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<Subcategory> GetAll();
     }
 }
