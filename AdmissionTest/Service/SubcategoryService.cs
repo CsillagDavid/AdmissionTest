@@ -1,11 +1,11 @@
-﻿using AdmissionTest.Management.IManagement;
+﻿using AdmissionTest.management.iManagement;
 using AdmissionTest.model.entity;
-using AdmissionTest.Service.IService;
+using AdmissionTest.service.iService;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 
-namespace AdmissionTest.Service {
+namespace AdmissionTest.service {
     public class SubcategoryService : ISubcategoryService {
         private readonly ILogger<SubcategoryService> logger;
         private readonly ISubcategoryManagement subcategoryManagement;

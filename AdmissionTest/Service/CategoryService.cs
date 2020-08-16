@@ -1,11 +1,12 @@
-﻿using AdmissionTest.Management.IManagement;
+﻿using AdmissionTest.management.iManagement;
 using AdmissionTest.model.entity;
-using AdmissionTest.Service.IService;
+using AdmissionTest.model.exception;
+using AdmissionTest.service.iService;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 
-namespace AdmissionTest.Service {
+namespace AdmissionTest.service {
     public class CategoryService : ICategoryService {
         private readonly ILogger<CategoryService> logger;
         private readonly ICategoryManagement categoryManagement;
@@ -23,8 +24,27 @@ namespace AdmissionTest.Service {
 
         public void Save(Category category)
         {
-            if (categoryManagement.FindWithName(category.Name) is null) {
+            if (categoryManagement.FindByName(category.Name) is null) {
                 categoryManagement.Save(category);
+            }
+        }
+
+        public void Update(Category category)
+        {
+            var updatableCategory = categoryManagement.FindById(category.ID);
+            if(updatableCategory is null)
+            {
+                throw new CategoryApiException("Can't find the category!");
+            }
+            if (updatableCategory.Name.ToLower().Equals(category.Name.ToLower())) {
+            }
+            try
+            {
+                throw new CategoryApiException("Not implemented!");
+            }
+            catch (Exception ex)
+            {
+                throw new CategoryApiException("Can't save the category!", ex);
             }
         }
     }

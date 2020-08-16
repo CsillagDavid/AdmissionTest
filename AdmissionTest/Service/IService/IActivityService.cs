@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace AdmissionTest.Service.IService {
+namespace AdmissionTest.service.iService {
     public interface IActivityService {
         /// <summary>
         /// Add new activity to the database. It can be throw <seealso cref="model.exception.ActivityApiException"/>

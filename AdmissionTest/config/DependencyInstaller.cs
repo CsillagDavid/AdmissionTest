@@ -1,8 +1,8 @@
-﻿using AdmissionTest.Management;
-using AdmissionTest.Management.IManagement;
+﻿using AdmissionTest.management;
+using AdmissionTest.management.iManagement;
 using AdmissionTest.model.context;
-using AdmissionTest.Service;
-using AdmissionTest.Service.IService;
+using AdmissionTest.service;
+using AdmissionTest.service.iService;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 

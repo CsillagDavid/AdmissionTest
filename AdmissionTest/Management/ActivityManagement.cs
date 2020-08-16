@@ -1,12 +1,14 @@
-﻿using AdmissionTest.Management.IManagement;
+﻿using AdmissionTest.management.iManagement;
 using AdmissionTest.model.context;
 using AdmissionTest.model.entity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 
-namespace AdmissionTest.Management {
+namespace AdmissionTest.management {
     public class ActivityManagement : IActivityManagement {
         private readonly ActivityContext activityContext;
         public ActivityManagement(ActivityContext activityContext)
@@ -16,16 +18,18 @@ namespace AdmissionTest.Management {
 
         public void Delete(Activity activity)
         {
-            var deletableActivity = activityContext.Activities.Include(a => a.Category).Include(a => a.Subcategory).First(a => a.ID == activity.ID);
+            var deletableActivity = activityContext.Activities
+                .Include(a => a.Category)
+                .Include(a => a.Subcategory).ThenInclude(s => s.Category)
+                .First(a => a.ID == activity.ID);
             deletableActivity.Archived = true;
-            activityContext.Activities.Update(deletableActivity);
             activityContext.SaveChanges();
         }
 
         public Activity FindById(int id)
         {
             var activity = activityContext.Activities.Include(a => a.Category).Include(a => a.Subcategory).FirstOrDefault(a => a.ID == id);
-            if (activity != null)
+            if (activity != null && activity.Subcategory != null)
             {
                 activity.Subcategory.Category = null;
             }
@@ -78,14 +82,6 @@ namespace AdmissionTest.Management {
 
         public void Save(Activity activity)
         {
-            //activityContext.Activities.FromSql("INSERT INTO ", 
-            //    activity.Comment,
-            //    activity.Category.ID,
-            //    activity.Subcategory.ID,
-            //    activity.StartDate,
-            //    activity.EndDate
-            //    );
-            activity.Category.Subcategories = null;
             activityContext.Activities.Add(activity);
             activityContext.Attach(activity.Category);
             if (activity.Subcategory != null)
@@ -97,17 +93,59 @@ namespace AdmissionTest.Management {
 
         public void Update(Activity activity)
         {
-            this.Delete(activity);
-            activity.ModifiedAt = DateTime.Now;
-            this.Save(activity);
-            //updatableActivity.ModifiedAt = DateTime.Now;
-            //activityContext.Activities.Update(updatableActivity);
-            //if (updatableActivity.Subcategory != null)
-            //{
-            //    activityContext.Attach(updatableActivity.Subcategory);
-            //}
-            //activityContext.Attach(updatableActivity.Category);
-            //activityContext.SaveChanges();
+            using (SqlConnection conn = new SqlConnection(Environment.GetEnvironmentVariable("ConnectionString")))
+            {
+                using (SqlCommand cmd = new SqlCommand())
+                {
+                    conn.Open();
+
+                    SqlTransaction transaction = conn.BeginTransaction();
+                    cmd.Connection = conn;
+                    cmd.CommandType = CommandType.Text;
+                    cmd.Transaction = transaction;
+                    cmd.Transaction.Save("Save");
+
+                    try
+                    {
+                        cmd.CommandText = @"UPDATE activity SET archived = 1 where id=@id";
+                        cmd.Parameters.AddWithValue("@id", activity.ID);
+                        cmd.ExecuteNonQuery();
+
+                        cmd.Parameters.Clear();
+
+                        cmd.CommandText = @"INSERT INTO activity (comment, category, subcategory, start_date, end_date, created_at, modified_at) VALUES
+                                        (@comment, @category, @subcategory, @start_date, @end_date, @created_at, @modified_at)";
+
+                        cmd.Parameters.AddWithValue("@comment", activity.Comment);
+                        cmd.Parameters.AddWithValue("@category", activity.Category.ID);
+                        if (activity.Subcategory != null)
+                        {
+                            cmd.Parameters.AddWithValue("@subcategory", activity.Subcategory.ID);
+                        }
+                        else {
+                            cmd.Parameters.AddWithValue("@subcategory", DBNull.Value);
+                        }
+                        cmd.Parameters.AddWithValue("@start_date", activity.StartDate);
+                        cmd.Parameters.AddWithValue("@end_date", activity.EndDate);
+                        cmd.Parameters.AddWithValue("@created_at", activity.CreatedAt);
+                        cmd.Parameters.AddWithValue("@modified_at", activity.ModifiedAt);
+                        cmd.ExecuteNonQuery();
+
+                        transaction.Commit();
+                    }
+                    catch (Exception e)
+                    {
+                        cmd.Transaction.Rollback("Save");
+                        throw;
+                        //MessgeBox.Show(e.Message.ToString(), "Error Message");
+                    }
+                    finally
+                    {
+                        cmd.Dispose();
+                        conn.Dispose();
+                    }
+                }
+            }
         }
     }
 }

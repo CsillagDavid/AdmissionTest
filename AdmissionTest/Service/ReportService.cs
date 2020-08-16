@@ -1,10 +1,10 @@
 ﻿using AdmissionTest.model.entity;
-using AdmissionTest.Service.IService;
+using AdmissionTest.service.iService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AdmissionTest.Service {
+namespace AdmissionTest.service {
     public class ReportService : IReportService {
         private readonly IActivityService activityService;
         public ReportService(IActivityService activityService)

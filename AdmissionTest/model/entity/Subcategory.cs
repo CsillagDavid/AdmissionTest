@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace AdmissionTest.model.entity {
     [Table(name: "subcategory")]
@@ -17,7 +14,7 @@ namespace AdmissionTest.model.entity {
 
         [NotNull]
         [Column(name: "created_at")]
-        public DateTime CreateAt { get; set; }
+        public DateTime CreatedAt { get; set; }
 
         [AllowNull]
         [Column(name: "modified_at")]

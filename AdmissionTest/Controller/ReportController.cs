@@ -1,11 +1,11 @@
 ﻿using System;
 using AdmissionTest.model.entity;
-using AdmissionTest.Service.IService;
+using AdmissionTest.service.iService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace AdmissionTest.Controller {
+namespace AdmissionTest.controller {
     [ApiController]
     [Route("[controller]")]
     public class ReportController : ControllerBase {

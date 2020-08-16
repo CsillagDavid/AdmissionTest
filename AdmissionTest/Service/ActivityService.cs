@@ -1,22 +1,25 @@
-﻿using AdmissionTest.Management.IManagement;
+﻿using AdmissionTest.management.iManagement;
 using AdmissionTest.model.entity;
 using AdmissionTest.model.exception;
-using AdmissionTest.Service.IService;
+using AdmissionTest.service.iService;
 using System;
 using System.Collections.Generic;
 
-namespace AdmissionTest.Service {
+namespace AdmissionTest.service {
     public class ActivityService : IActivityService {
         private readonly IActivityManagement activityManagement;
+        private readonly ISubcategoryManagement subcategoryManagement;
 
-        public ActivityService(IActivityManagement activityManagement)
+        public ActivityService(IActivityManagement activityManagement, ISubcategoryManagement subcategoryManagement)
         {
             this.activityManagement = activityManagement;
+            this.subcategoryManagement = subcategoryManagement;
         }
 
         public void Add(Activity activity)
         {
-            if (activity.EndDate.CompareTo(activity.StartDate) < 1) {
+            if (activity.EndDate.CompareTo(activity.StartDate) < 1)
+            {
                 throw new ActivityApiException("The end date must be greater than start date!");
             }
             if (activity.Comment.Length == 0)
@@ -27,7 +30,8 @@ namespace AdmissionTest.Service {
             {
                 if (!activityManagement.IsColliding(activity))
                 {
-                    activity.CreateAt = DateTime.Now;
+                    activity.Category.Subcategories = null;
+                    activity.CreatedAt = DateTime.Now;
                     activityManagement.Save(activity);
                 }
                 else
@@ -35,7 +39,8 @@ namespace AdmissionTest.Service {
                     throw new ActivityApiException("The activity is colliding with another!");
                 }
             }
-            catch (ActivityApiException) {
+            catch (ActivityApiException)
+            {
                 throw;
             }
             catch (ArgumentNullException ex)
@@ -44,7 +49,7 @@ namespace AdmissionTest.Service {
             }
             catch (Exception ex)
             {
-                throw new ActivityApiException("Can't save the activity!");
+                throw new ActivityApiException("Can't save the activity!", ex);
             }
         }
 
@@ -73,17 +78,22 @@ namespace AdmissionTest.Service {
             {
                 throw new ActivityApiException("The end date must be greater then start date!");
             }
-            if (activity.Comment.Length == 0) {
-                    throw new ActivityApiException("The comment is required!");
+            if (activity.Comment.Length == 0)
+            {
+                throw new ActivityApiException("The comment is required!");
             }
             try
             {
-                if (!updatableIsModified(activity)) {
+                if (!IsModified(activity))
+                {
                     throw new ActivityApiException("The activity haven't got modified param!");
                 }
                 if (!activityManagement.IsUpdateColliding(activity))
                 {
+                    var oldActivity = activityManagement.FindById(activity.ID);
+                    activity.CreatedAt = oldActivity.CreatedAt;
                     activity.ModifiedAt = DateTime.Now;
+
                     activityManagement.Update(activity);
                 }
                 else
@@ -101,14 +111,15 @@ namespace AdmissionTest.Service {
             }
             catch (Exception ex)
             {
-                throw new ActivityApiException("Can't update the activity!");
+                throw new ActivityApiException("Can't update the activity!", ex);
             }
         }
 
-        private bool updatableIsModified(Activity activity)
+        private bool IsModified(Activity activity)
         {
             var oldActivity = activityManagement.FindById(activity.ID);
-            if (oldActivity is null) {
+            if (oldActivity is null)
+            {
                 throw new ActivityApiException("The updatable activity not found!");
             }
             return !oldActivity.Comment.Equals(activity.Comment)

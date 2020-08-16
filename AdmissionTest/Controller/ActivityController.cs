@@ -1,13 +1,12 @@
 ﻿using AdmissionTest.model.entity;
-using AdmissionTest.Service.IService;
+using AdmissionTest.service.iService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Net;
 
-namespace AdmissionTest.Controller {
+namespace AdmissionTest.controller {
     [ApiController]
     [Route("[controller]")]
     public class ActivityController: ControllerBase {

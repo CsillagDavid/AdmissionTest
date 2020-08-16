@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace AdmissionTest.Management.IManagement {
+namespace AdmissionTest.management.iManagement {
     public interface IActivityManagement {
         /// <summary>
         /// Save <see cref="Activity"/> entity
@@ -39,7 +39,7 @@ namespace AdmissionTest.Management.IManagement {
         /// <param name="activity"></param>
         public void Update(Activity activity);
         /// <summary>
-        /// Return with <see cref="Activity"/> entity if it be int the database else return with null
+        /// Return with <see cref="Activity"/> entity if it be in the database else return with null
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
