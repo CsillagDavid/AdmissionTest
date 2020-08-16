@@ -20,7 +20,7 @@ namespace AdmissionTest.controller {
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(typeof(IEnumerable<Category>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public Report Report()
         {
             return reportService.CreateDailyReport();

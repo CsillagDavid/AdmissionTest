@@ -8,12 +8,10 @@ using System.Collections.Generic;
 namespace AdmissionTest.service {
     public class ActivityService : IActivityService {
         private readonly IActivityManagement activityManagement;
-        private readonly ISubcategoryManagement subcategoryManagement;
 
-        public ActivityService(IActivityManagement activityManagement, ISubcategoryManagement subcategoryManagement)
+        public ActivityService(IActivityManagement activityManagement)
         {
             this.activityManagement = activityManagement;
-            this.subcategoryManagement = subcategoryManagement;
         }
 
         public void Add(Activity activity)
@@ -55,7 +53,18 @@ namespace AdmissionTest.service {
 
         public void Delete(Activity activity)
         {
-            activityManagement.Delete(activity);
+            var deletableActivity = activityManagement.FindById(activity.ID);
+            if (deletableActivity is null) {
+                throw new ActivityApiException("Can't find the activity!");
+            }
+            try
+            {
+                activityManagement.Delete(deletableActivity);
+            }
+            catch (Exception ex)
+            {
+                throw new ActivityApiException("Can't delete the activity!", ex);
+            }
         }
 
         public IList<Activity> GetAll()
@@ -76,7 +85,7 @@ namespace AdmissionTest.service {
         {
             if (activity.EndDate.CompareTo(activity.StartDate) < 1)
             {
-                throw new ActivityApiException("The end date must be greater then start date!");
+                throw new ActivityApiException("The end date must be greater than start date!");
             }
             if (activity.Comment.Length == 0)
             {
@@ -115,6 +124,11 @@ namespace AdmissionTest.service {
             }
         }
 
+        /// <summary>
+        /// Return with true if the <see cref="Activity"/> entity is modified else return with false
+        /// </summary>
+        /// <param name="activity"></param>
+        /// <returns></returns>
         private bool IsModified(Activity activity)
         {
             var oldActivity = activityManagement.FindById(activity.ID);

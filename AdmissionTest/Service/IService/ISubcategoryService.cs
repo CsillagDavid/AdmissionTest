@@ -22,6 +22,6 @@ namespace AdmissionTest.service.iService {
         /// Return with all <see cref="Subcategory"/> entity
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<Subcategory> GetAll();
+        public IList<Subcategory> GetAll();
     }
 }

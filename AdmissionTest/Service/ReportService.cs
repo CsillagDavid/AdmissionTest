@@ -9,6 +9,8 @@ namespace AdmissionTest.service {
         private readonly IActivityService activityService;
         public ReportService(IActivityService activityService)
         {
+            //The ReportService use the ActivityService because we don't need to create an ReportService.
+            //The ReportService contains whole functionality what the ActivityService contains too so we could simplify the model by placing the ReportService above the ActivityService.
             this.activityService = activityService;
         }
 
@@ -23,9 +25,11 @@ namespace AdmissionTest.service {
             {
                 CategorisedActivities = new List<ReportProperty>()
             };
+            
             activities.ForEach(a =>
             {
                 var categorisedActivity = report.CategorisedActivities.FirstOrDefault(c => c.Category.ID == a.Category.ID);
+                //If it is null that means it contains a new category so need to create a new ReportProperty
                 if (categorisedActivity is null)
                 {
                     report.CategorisedActivities.Add(new ReportProperty()
@@ -35,6 +39,7 @@ namespace AdmissionTest.service {
                         Activities = new List<Activity>() { a }
                     });
                 }
+                //If it isn't null then we summing the activity's duration and add it to the rigth ReportProperty's list
                 else
                 {
                     categorisedActivity.SummedTime += a.EndDate.Subtract(a.StartDate).TotalHours;

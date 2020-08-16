@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Net;
 
 namespace AdmissionTest.controller {
     [ApiController]
@@ -20,8 +21,8 @@ namespace AdmissionTest.controller {
         }
 
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(typeof(IEnumerable<Category>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IList<Activity>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IList<Activity> GetAll()
         {
             return activityService.GetAll();
@@ -39,7 +40,6 @@ namespace AdmissionTest.controller {
             }
             catch (Exception ex)
             {
-                Response.StatusCode = StatusCodes.Status500InternalServerError;
                 logger.LogError(ex.Message);
                 throw;
             }

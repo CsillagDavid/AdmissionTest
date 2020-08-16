@@ -18,17 +18,44 @@ namespace AdmissionTest.management {
 
         public void Delete(Activity activity)
         {
-            var deletableActivity = activityContext.Activities
-                .Include(a => a.Category)
-                .Include(a => a.Subcategory).ThenInclude(s => s.Category)
-                .First(a => a.ID == activity.ID);
-            deletableActivity.Archived = true;
-            activityContext.SaveChanges();
+            using (SqlConnection conn = new SqlConnection(Environment.GetEnvironmentVariable("ConnectionString")))
+            {
+                using (SqlCommand cmd = new SqlCommand())
+                {
+                    conn.Open();
+                    //Begin transaction to avoid update failures
+                    SqlTransaction transaction = conn.BeginTransaction();
+                    cmd.Connection = conn;
+                    cmd.CommandType = CommandType.Text;
+                    cmd.Transaction = transaction;
+                    cmd.Transaction.Save("Save");
+
+                    try
+                    {
+                        cmd.CommandText = @"UPDATE activity SET archived = 1 where id=@id";
+                        cmd.Parameters.AddWithValue("@id", activity.ID);
+                        cmd.ExecuteNonQuery();
+
+                        transaction.Commit();
+                    }
+                    catch (Exception e)
+                    {
+                        cmd.Transaction.Rollback("Save");
+                        throw;
+                    }
+                    finally
+                    {
+                        cmd.Dispose();
+                        conn.Dispose();
+                    }
+                }
+            }
         }
 
         public Activity FindById(int id)
         {
-            var activity = activityContext.Activities.Include(a => a.Category).Include(a => a.Subcategory).FirstOrDefault(a => a.ID == id);
+            var activity = activityContext.Activities.Include(a => a.Category).Include(a => a.Subcategory).ThenInclude(s => s.Category).FirstOrDefault(a => a.ID == id);
+            //It needs to be avoiding circles
             if (activity != null && activity.Subcategory != null)
             {
                 activity.Subcategory.Category = null;
@@ -39,6 +66,7 @@ namespace AdmissionTest.management {
         public IList<Activity> GetAll()
         {
             var activities = activityContext.Activities.Include(a => a.Category).Include(a => a.Subcategory).ToList();
+            //It needs to be avoiding circles
             activities.ForEach(a =>
             {
                 if (a.Subcategory != null)
@@ -55,6 +83,7 @@ namespace AdmissionTest.management {
             (a.EndDate.CompareTo(to) < 1) && (a.EndDate.CompareTo(from) == 1) ||
             (a.StartDate.CompareTo(from) == -1) && (a.EndDate.CompareTo(to) == 1))
             .Include(a => a.Category).Include(a => a.Subcategory).ToList();
+            //It needs to be avoiding circles
             activities.ForEach(a =>
             {
                 if (a.Subcategory != null)
@@ -98,7 +127,7 @@ namespace AdmissionTest.management {
                 using (SqlCommand cmd = new SqlCommand())
                 {
                     conn.Open();
-
+                    //Begin transaction to avoid the failed update or insert
                     SqlTransaction transaction = conn.BeginTransaction();
                     cmd.Connection = conn;
                     cmd.CommandType = CommandType.Text;
@@ -107,6 +136,7 @@ namespace AdmissionTest.management {
 
                     try
                     {
+                        //First of all update the old activity then if it done try to insert the updateed entity. If it failed run the rollback methode to avoid to create wrong data
                         cmd.CommandText = @"UPDATE activity SET archived = 1 where id=@id";
                         cmd.Parameters.AddWithValue("@id", activity.ID);
                         cmd.ExecuteNonQuery();
@@ -137,7 +167,6 @@ namespace AdmissionTest.management {
                     {
                         cmd.Transaction.Rollback("Save");
                         throw;
-                        //MessgeBox.Show(e.Message.ToString(), "Error Message");
                     }
                     finally
                     {

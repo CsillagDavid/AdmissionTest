@@ -35,6 +35,7 @@ namespace AdmissionTest.management {
         public IList<Category> GetAll()
         {
             var categories = categoryContext.Categories.ToList();
+            //Include subcategories. I can do it better with Include but i haven't got enought time to test and validate it
             categories.ForEach(c => {
                 c.Subcategories = subcategoryContext.Subcategories.Include(s => s.Category).Where(s => s.Category.ID.Equals(c.ID)).ToList();
             });

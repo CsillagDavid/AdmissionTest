@@ -22,7 +22,7 @@ namespace AdmissionTest.management.iManagement {
         /// Return with all <see cref="Subcategory"/> entity
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<Subcategory> GetAll();
+        public IList<Subcategory> GetAll();
         /// <summary>
         ///  Return with <see cref="Subcategory"/> entity if it be in the database else return with null
         /// </summary>

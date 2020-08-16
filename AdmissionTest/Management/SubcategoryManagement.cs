@@ -1,7 +1,10 @@
 ﻿using AdmissionTest.management.iManagement;
 using AdmissionTest.model.context;
 using AdmissionTest.model.entity;
+using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 
 namespace AdmissionTest.management {
@@ -14,7 +17,38 @@ namespace AdmissionTest.management {
 
         public void Delete(Subcategory subcategory)
         {
-            throw new System.NotImplementedException();
+            using (SqlConnection conn = new SqlConnection(Environment.GetEnvironmentVariable("ConnectionString")))
+            {
+                using (SqlCommand cmd = new SqlCommand())
+                {
+                    conn.Open();
+                    //Begin transaction to avoid update failures
+                    SqlTransaction transaction = conn.BeginTransaction();
+                    cmd.Connection = conn;
+                    cmd.CommandType = CommandType.Text;
+                    cmd.Transaction = transaction;
+                    cmd.Transaction.Save("Save");
+
+                    try
+                    {
+                        cmd.CommandText = @"UPDATE subcategory SET archived = 1 where id=@id";
+                        cmd.Parameters.AddWithValue("@id", subcategory.ID);
+                        cmd.ExecuteNonQuery();
+
+                        transaction.Commit();
+                    }
+                    catch (Exception e)
+                    {
+                        cmd.Transaction.Rollback("Save");
+                        throw;
+                    }
+                    finally
+                    {
+                        cmd.Dispose();
+                        conn.Dispose();
+                    }
+                }
+            }
         }
 
         public Subcategory FindById(int id)
@@ -22,7 +56,7 @@ namespace AdmissionTest.management {
             return subcategoryContext.Subcategories.FirstOrDefault(s => s.ID == id);
         }
 
-        public IEnumerable<Subcategory> GetAll()
+        public IList<Subcategory> GetAll()
         {
             return subcategoryContext.Subcategories.ToList();
         }

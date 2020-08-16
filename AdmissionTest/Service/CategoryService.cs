@@ -24,19 +24,34 @@ namespace AdmissionTest.service {
 
         public void Save(Category category)
         {
-            if (categoryManagement.FindByName(category.Name) is null) {
-                categoryManagement.Save(category);
+            if (categoryManagement.FindByName(category.Name) is null)
+            {
+                try
+                {
+                    categoryManagement.Save(category);
+                }
+                catch (Exception ex)
+                {
+                    throw new CategoryApiException("Can't save the category!", ex);
+                }
+            }
+            else
+            {
+                throw new CategoryApiException("Category is already exist!");
             }
         }
 
         public void Update(Category category)
         {
             var updatableCategory = categoryManagement.FindById(category.ID);
-            if(updatableCategory is null)
+            if (updatableCategory is null)
             {
                 throw new CategoryApiException("Can't find the category!");
             }
-            if (updatableCategory.Name.ToLower().Equals(category.Name.ToLower())) {
+            if (updatableCategory.Name.ToLower().Equals(category.Name.ToLower()))
+            {
+            
+                throw new CategoryApiException("The category's name must be different!");
             }
             try
             {
